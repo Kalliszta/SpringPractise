@@ -5,7 +5,6 @@ import java.util.Objects;
 import javax.persistence.*;
 
 @Entity //this marks this class as the table
-@Table
 public class Students {
 	
 	//columns for the the table
@@ -85,6 +84,11 @@ public class Students {
 		Students other = (Students) obj;
 		return age == other.age && Objects.equals(id, other.id) && Objects.equals(name, other.name)
 				&& Objects.equals(phoneNumber, other.phoneNumber);
+	}
+
+	@Override
+	public String toString() {
+		return "Students [id=" + id + ", name=" + name + ", age=" + age + ", phoneNumber=" + phoneNumber + "]";
 	}
 	
 	
