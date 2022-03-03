@@ -33,7 +33,7 @@ public class StudentsController {
 	}
 	
 	//readById - get request - 1 record
-	@GetMapping("/getAll/{id}")
+	@GetMapping("/get/{id}")
 	public ResponseEntity<Students> getStudent(@PathVariable Long id){
 		return new ResponseEntity<Students>(this.service.readById(id), HttpStatus.OK);
 	}

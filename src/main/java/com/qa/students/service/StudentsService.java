@@ -9,11 +9,10 @@ import com.qa.students.domain.Students;
 import com.qa.students.repo.StudentsRepo;
 
 @Service
-public class StudentsService {
+public class StudentsService implements ServiceInterface<Students> {
 	private StudentsRepo repo;
 
 	public StudentsService(StudentsRepo repo) {
-		super();
 		this.repo = repo;
 	}
 	
@@ -32,13 +31,14 @@ public class StudentsService {
 		return op.get();
 	}
 	
-	//update - getters & setters to update each field individually + optionals
+	//update - getters & setters to update each field individually + optional
 	public Students update(Long id, Students newVersion) {
 		Optional<Students> op = this.repo.findById(id);
 		if (op.isPresent()) {
 			Students existingStudent = op.get();
 			existingStudent.setName(newVersion.getName());
 			existingStudent.setAge(newVersion.getAge());
+			existingStudent.setPhoneNumber(newVersion.getPhoneNumber());
 			return this.repo.save(existingStudent);
 		}
 		return null;
