@@ -18,7 +18,7 @@ public class StudentControllerTest {
 	private StudentService service;
 	
 	@Autowired
-	private StudentsController controller;
+	private StudentController controller;
 	
 //	@Test
 //	public void testCreate() {

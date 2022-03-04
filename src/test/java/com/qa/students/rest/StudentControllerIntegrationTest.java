@@ -84,13 +84,24 @@ public class StudentControllerIntegrationTest {
 	void testUpdate() throws Exception {
 		Student expected = new Student(1L, "Bob", 18, "+021");
 		
-		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.request(HttpMethod.POST, URL + "/update").contentType(MediaType.APPLICATION_JSON).content(jsonifier.writeValueAsString(expected)).accept(MediaType.APPLICATION_JSON); //don't need contentType and accept for requests with no RequestBody
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.request(HttpMethod.PUT, URL + "/update/" +id).contentType(MediaType.APPLICATION_JSON).content(jsonifier.writeValueAsString(expected)).accept(MediaType.APPLICATION_JSON); //don't need contentType and accept for requests with no RequestBody
 
 		
-		ResultMatcher status = MockMvcResultMatchers.status().isOk();
+		ResultMatcher status = MockMvcResultMatchers.status().isAccepted();
 		ResultMatcher content = MockMvcResultMatchers.content().json(jsonifier.writeValueAsString(expected));
 	
 		this.mock.perform(mockRequest).andExpect(status).andExpect(content);
 	}
 	
+	@Test
+	void testDelete() throws Exception {
+
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.request(HttpMethod.DELETE, URL + "/remove/" +id);
+
+		
+		ResultMatcher status = MockMvcResultMatchers.status().isOk();
+		ResultMatcher content = MockMvcResultMatchers.content().string("true");
+	
+		this.mock.perform(mockRequest).andExpect(status);
+	}
 }
