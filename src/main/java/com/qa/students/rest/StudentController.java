@@ -7,15 +7,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.qa.students.domain.Student;
-import com.qa.students.service.StudentsService;
+import com.qa.students.service.StudentService;
 
 @RestController
 @RequestMapping("/student")
-public class StudentsController {
+public class StudentController {
 
-	private StudentsService service;
+	private StudentService service;
 
-	public StudentsController(StudentsService service) {
+	public StudentController(StudentService service) {
 		super();
 		this.service = service;
 	}

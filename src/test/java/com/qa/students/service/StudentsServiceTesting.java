@@ -19,7 +19,7 @@ public class StudentsServiceTesting {
 	private Student savedStudent;
 	
 	@Autowired
-	private StudentsService service;
+	private StudentService service;
 	
 	@MockBean
 	private StudentsRepo repo;

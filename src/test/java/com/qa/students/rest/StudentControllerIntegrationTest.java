@@ -1,5 +1,8 @@
 package com.qa.students.rest;
 
+import java.util.*;
+
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -11,30 +14,94 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qa.students.domain.Student;
 
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-@Sql(scripts = {"classpath:scema-test.sql","classpath:data-test.sql"}, executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = {"classpath:schema-test.sql","classpath:data-test.sql"}, executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
 @ActiveProfiles(profiles = "test")
+//@Disabled //used to ignore/disable class
 public class StudentControllerIntegrationTest {
+	
+	//used to mock sending requests
 	@Autowired
 	private MockMvc mock;
 	
 	@Autowired
 	private ObjectMapper jsonifier; //java object to json
 	
+	private final String URL = "http://localhost:8080/student";
+	private Long id = 1L;
+	
 	@Test
 	void testCreate() throws Exception {
-		Student testStudent = new Student("Lily", 15, "na");
-		Student expectedStudent = new Student(1L,"Lily", 15, "na");
+		Student testStudent = new Student(0L,"Lily", 15, "na");
+		Student expectedStudent = new Student(5L,"Lily", 15, "na");
 		
-		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.request(HttpMethod.POST, "https://localhost:8080/create").contentType(MediaType.APPLICATION_JSON).content(jsonifier.writeValueAsString(testStudent)).accept(MediaType.APPLICATION_JSON); //don't need contentType and accept for requests with no RequestBody
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.request(HttpMethod.POST, URL + "/create").contentType(MediaType.APPLICATION_JSON).content(jsonifier.writeValueAsString(testStudent)).accept(MediaType.APPLICATION_JSON); //don't need contentType and accept for requests with no RequestBody
 		
+		ResultMatcher status = MockMvcResultMatchers.status().isCreated();
+		ResultMatcher content = MockMvcResultMatchers.content().json(jsonifier.writeValueAsString(expectedStudent));
 	
+		this.mock.perform(mockRequest).andExpect(status).andExpect(content);
+	}
+	
+	@Test
+	void testReadAll() throws Exception {
+		List<Student> expected = Arrays.asList(
+				new Student(1L, "Bob", 17, "+021"), 
+				new Student(2L, "Millie", 15,"+026"),
+				new Student(3L, "Lily", 19,"+028"),
+				new Student(4L, "Billy", 11,"+020"));
+		
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.request(HttpMethod.GET, URL + "/getAll");
+		
+		ResultMatcher status = MockMvcResultMatchers.status().isOk();
+		ResultMatcher content = MockMvcResultMatchers.content().json(jsonifier.writeValueAsString(expected));
+	
+		this.mock.perform(mockRequest).andExpect(status).andExpect(content);
+	}
+	
+	@Test
+	void testReadById() throws Exception {
+		Student expected = new Student(1L, "Bob", 17, "+021");
+		
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.request(HttpMethod.GET, URL + "/get/" + id);
+		
+		ResultMatcher status = MockMvcResultMatchers.status().isOk();
+		ResultMatcher content = MockMvcResultMatchers.content().json(jsonifier.writeValueAsString(expected));
+	
+		this.mock.perform(mockRequest).andExpect(status).andExpect(content);
+	}
+	
+	@Test
+	void testUpdate() throws Exception {
+		Student expected = new Student(1L, "Bob", 18, "+021");
+		
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.request(HttpMethod.PUT, URL + "/update/" +id).contentType(MediaType.APPLICATION_JSON).content(jsonifier.writeValueAsString(expected)).accept(MediaType.APPLICATION_JSON); //don't need contentType and accept for requests with no RequestBody
+
+		
+		ResultMatcher status = MockMvcResultMatchers.status().isAccepted();
+		ResultMatcher content = MockMvcResultMatchers.content().json(jsonifier.writeValueAsString(expected));
+	
+		this.mock.perform(mockRequest).andExpect(status).andExpect(content);
+	}
+	
+	@Test
+	void testDelete() throws Exception {
+
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.request(HttpMethod.DELETE, URL + "/remove/" +id);
+
+		
+		ResultMatcher status = MockMvcResultMatchers.status().isOk();
+		ResultMatcher content = MockMvcResultMatchers.content().string("true");
+	
+		this.mock.perform(mockRequest).andExpect(status);
 	}
 }
