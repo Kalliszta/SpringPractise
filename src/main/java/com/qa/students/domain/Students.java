@@ -7,7 +7,7 @@ import lombok.*;
 @Entity //this marks this class as the table
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
+@Getter//From this line down for the annotations below you could just use @Data, however it would also add the @RequiredArgsConstructor as its part of @Data
 @Setter
 @ToString
 @EqualsAndHashCode
@@ -28,6 +28,12 @@ public class Students {
 		this.name = name;
 		this.age = age;
 		this.phoneNumber = phoneNumber;
+	}
+	
+	public void updateFields(Students newVersion) {
+		this.setName(newVersion.getName());
+		this.setAge(newVersion.getAge());
+		this.setPhoneNumber(newVersion.getPhoneNumber());
 	}
 	
 	

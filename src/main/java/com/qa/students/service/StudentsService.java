@@ -36,9 +36,7 @@ public class StudentsService implements ServiceInterface<Students> {
 		Optional<Students> op = this.repo.findById(id);
 		if (op.isPresent()) {
 			Students existingStudent = op.get();
-			existingStudent.setName(newVersion.getName());
-			existingStudent.setAge(newVersion.getAge());
-			existingStudent.setPhoneNumber(newVersion.getPhoneNumber());
+			existingStudent.updateFields(newVersion);
 			return this.repo.save(existingStudent);
 		}
 		return null;
@@ -46,7 +44,11 @@ public class StudentsService implements ServiceInterface<Students> {
 	
 	//delete - deleteById
 	public boolean delete(Long id) {
-		this.repo.deleteById(id);
+		try {
+			this.repo.deleteById(id);
+		} catch (Exception e) { //make more specific
+			return false;
+		}
 		return !(this.repo.existsById(id)); //true if yes so flip to make true if delete successful
 	}
 	
