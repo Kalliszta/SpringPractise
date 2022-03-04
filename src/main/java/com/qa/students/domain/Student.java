@@ -11,7 +11,7 @@ import lombok.*;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class Students {
+public class Student {
 	
 	//columns for the the table
 	
@@ -24,13 +24,13 @@ public class Students {
 	private String phoneNumber;
 	
 	
-	public Students(String name, int age, String phoneNumber) {
+	public Student(String name, int age, String phoneNumber) {
 		this.name = name;
 		this.age = age;
 		this.phoneNumber = phoneNumber;
 	}
 	
-	public void updateFields(Students newVersion) {
+	public void updateFields(Student newVersion) {
 		this.setName(newVersion.getName());
 		this.setAge(newVersion.getAge());
 		this.setPhoneNumber(newVersion.getPhoneNumber());

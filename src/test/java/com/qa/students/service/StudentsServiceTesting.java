@@ -9,13 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import com.qa.students.domain.Students;
+import com.qa.students.domain.Student;
 import com.qa.students.repo.StudentsRepo;
 
 @SpringBootTest
 public class StudentsServiceTesting {
 	
-	private Students newStudent;
+	private Student newStudent;
 	
 	@Autowired
 	private StudentsService service;
@@ -25,7 +25,7 @@ public class StudentsServiceTesting {
 	
 	@BeforeEach
 	void setUp() {
-		newStudent = new Students("Lily",15,"na")
+		newStudent = new Student("Lily",15,"na");
 	}
 	
 	@Test

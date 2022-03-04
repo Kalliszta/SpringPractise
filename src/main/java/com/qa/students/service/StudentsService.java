@@ -5,11 +5,11 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.qa.students.domain.Students;
+import com.qa.students.domain.Student;
 import com.qa.students.repo.StudentsRepo;
 
 @Service
-public class StudentsService implements ServiceInterface<Students> {
+public class StudentsService implements ServiceInterface<Student> {
 	private StudentsRepo repo;
 
 	public StudentsService(StudentsRepo repo) {
@@ -17,25 +17,25 @@ public class StudentsService implements ServiceInterface<Students> {
 	}
 	
 	//create - logic
-	public Students create(Students newStudent) {
+	public Student create(Student newStudent) {
 		return this.repo.save(newStudent);
 	}
 	
 	//read - findAll, findById
-	public List<Students> readAll() {
+	public List<Student> readAll() {
 		return this.repo.findAll();
 	}
 	
-	public Students readById(Long id) {
-		Optional<Students> op = this.repo.findById(id);
+	public Student readById(Long id) {
+		Optional<Student> op = this.repo.findById(id);
 		return op.get();
 	}
 	
 	//update - getters & setters to update each field individually + optional
-	public Students update(Long id, Students newVersion) {
-		Optional<Students> op = this.repo.findById(id);
+	public Student update(Long id, Student newVersion) {
+		Optional<Student> op = this.repo.findById(id);
 		if (op.isPresent()) {
-			Students existingStudent = op.get();
+			Student existingStudent = op.get();
 			existingStudent.updateFields(newVersion);
 			return this.repo.save(existingStudent);
 		}
@@ -53,7 +53,7 @@ public class StudentsService implements ServiceInterface<Students> {
 	}
 	
 	//returns list of adults
-	public List<Students> adults(){
+	public List<Student> adults(){
 		return this.repo.getAdult();
 	}
 }
