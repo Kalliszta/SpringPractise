@@ -9,10 +9,10 @@ import com.qa.students.domain.Student;
 import com.qa.students.repo.StudentsRepo;
 
 @Service
-public class StudentsService implements ServiceInterface<Student> {
+public class StudentService implements ServiceInterface<Student> {
 	private StudentsRepo repo;
 
-	public StudentsService(StudentsRepo repo) {
+	public StudentService(StudentsRepo repo) {
 		this.repo = repo;
 	}
 	

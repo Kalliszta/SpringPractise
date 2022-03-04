@@ -36,12 +36,15 @@ public class StudentControllerIntegrationTest {
 	@Autowired
 	private ObjectMapper jsonifier; //java object to json
 	
+	private final String URL = "http://localhost:8080/student";
+	private Long id = 1L;
+	
 	@Test
 	void testCreate() throws Exception {
 		Student testStudent = new Student(0L,"Lily", 15, "na");
 		Student expectedStudent = new Student(5L,"Lily", 15, "na");
 		
-		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.request(HttpMethod.POST, "https://localhost:8080/student/create").contentType(MediaType.APPLICATION_JSON).content(jsonifier.writeValueAsString(testStudent)).accept(MediaType.APPLICATION_JSON); //don't need contentType and accept for requests with no RequestBody
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.request(HttpMethod.POST, URL + "/create").contentType(MediaType.APPLICATION_JSON).content(jsonifier.writeValueAsString(testStudent)).accept(MediaType.APPLICATION_JSON); //don't need contentType and accept for requests with no RequestBody
 		
 		ResultMatcher status = MockMvcResultMatchers.status().isCreated();
 		ResultMatcher content = MockMvcResultMatchers.content().json(jsonifier.writeValueAsString(expectedStudent));
@@ -57,7 +60,7 @@ public class StudentControllerIntegrationTest {
 				new Student(3L, "Lily", 19,"+028"),
 				new Student(4L, "Billy", 11,"+020"));
 		
-		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.request(HttpMethod.GET, "https://localhost:8080/student/getAll");
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.request(HttpMethod.GET, URL + "/getAll");
 		
 		ResultMatcher status = MockMvcResultMatchers.status().isOk();
 		ResultMatcher content = MockMvcResultMatchers.content().json(jsonifier.writeValueAsString(expected));
@@ -65,5 +68,29 @@ public class StudentControllerIntegrationTest {
 		this.mock.perform(mockRequest).andExpect(status).andExpect(content);
 	}
 	
+	@Test
+	void testReadById() throws Exception {
+		Student expected = new Student(1L, "Bob", 17, "+021");
+		
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.request(HttpMethod.GET, URL + "/get/" + id);
+		
+		ResultMatcher status = MockMvcResultMatchers.status().isOk();
+		ResultMatcher content = MockMvcResultMatchers.content().json(jsonifier.writeValueAsString(expected));
+	
+		this.mock.perform(mockRequest).andExpect(status).andExpect(content);
+	}
+	
+	@Test
+	void testUpdate() throws Exception {
+		Student expected = new Student(1L, "Bob", 18, "+021");
+		
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.request(HttpMethod.POST, URL + "/update").contentType(MediaType.APPLICATION_JSON).content(jsonifier.writeValueAsString(expected)).accept(MediaType.APPLICATION_JSON); //don't need contentType and accept for requests with no RequestBody
+
+		
+		ResultMatcher status = MockMvcResultMatchers.status().isOk();
+		ResultMatcher content = MockMvcResultMatchers.content().json(jsonifier.writeValueAsString(expected));
+	
+		this.mock.perform(mockRequest).andExpect(status).andExpect(content);
+	}
 	
 }

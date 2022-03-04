@@ -10,12 +10,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.qa.students.domain.Student;
 import com.qa.students.repo.StudentsRepo;
-import com.qa.students.service.StudentsService;
+import com.qa.students.service.StudentService;
 
 @SpringBootTest
-public class StudentController {
+public class StudentControllerTest {
 	@MockBean
-	private StudentsService service;
+	private StudentService service;
 	
 	@Autowired
 	private StudentsController controller;
