@@ -16,6 +16,7 @@ import com.qa.students.repo.StudentsRepo;
 public class StudentsServiceTesting {
 	
 	private Student newStudent;
+	private Student savedStudent;
 	
 	@Autowired
 	private StudentsService service;
@@ -25,12 +26,22 @@ public class StudentsServiceTesting {
 	
 	@BeforeEach
 	void setUp() {
-		newStudent = new Student("Lily",15,"na");
+		newStudent = new Student("Lily", 15, "na");
+		savedStudent = new Student(1L, "Lily", 15,"na");
 	}
 	
 	@Test
 	void testCreate() {
+		//given
+		//testing data
 		
+		//when
+		Mockito.when(this.repo.save(newStudent)).thenReturn(savedStudent);
+		//then
+		assertThat(this.service.create(newStudent)).isEqualTo(savedStudent);
+	
+		//verify
+		Mockito.verify(this.repo, Mockito.times(1)).save(newStudent);
 	}
 	
 	@Test
